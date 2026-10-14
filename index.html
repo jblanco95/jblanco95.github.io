@@ -676,7 +676,7 @@ function renderPerson(id){
       </div>
     </aside>
   </div>
-  ${notes.length?`<div class="notes-bottom" style="display:grid;gap:8px;margin-top:28px">${notes.map(n=>`<div class="note"><b>Nota.</b> ${n}</div>`).join('')}</div>`:''}`;
+  ${OWNER&&notes.length?`<div class="notes-bottom" style="display:grid;gap:8px;margin-top:28px"><div style="font-size:.75rem;color:var(--muted)">Notas internas de revisión · só visibles para a persoa propietaria</div>${notes.map(n=>`<div class="note"><b>Nota.</b> ${n}</div>`).join('')}</div>`:''}`;
   window.scrollTo(0,0);
 }
 
@@ -1168,6 +1168,7 @@ document.addEventListener('click',e=>{
 });
 
 // ---- v70: informar dun erro (correo xa redactado; non se garda nada na páxina) ----
+const PORTAL_VER='v71';
 const REPORT_EMAIL='jose.blanco2@usc.es';
 function errContext(){
   const h=location.hash.slice(1); let t='Páxina de busca';
@@ -1283,7 +1284,7 @@ async function addPersons(arr){
   for(let i=0;i<arr.length;i+=5000){ const ch=arr.slice(i,i+5000); ch.forEach(p=>{prepRec(p); indexPerson(p);}); for(const p of ch) DATA.p.push(p); await pause(); }
 }
 function footer(d){
-  $('#foot').innerHTML=`<p class="errfoot">Atopaches un erro ou un dato incorrecto? <button type="button" class="errbtn" data-err="1">Informar dun erro</button> · <a href="#aviso-legal">Aviso legal e privacidade</a></p><details class="fontes"><summary><b>Fontes</b> (${d.meta.fontes.length}) · datos a ${fmtD(d.meta.actualizado)}</summary><ul>${d.meta.fontes.map(f=>`<li>${esc(f)}</li>`).join('')}</ul></details><p>Cores dos partidos: Wikipedia (ficha en es.wikipedia; se non consta, en.wikipedia). As formacións sen cor de referencia levan tons neutros.</p><p>As fichas unen rexistros polo nome completo (e, nas fontes autonómicas, por variantes do mesmo nome). Pode haber homónimos.</p>`;
+  $('#foot').innerHTML=`<p class="errfoot">Atopaches un erro ou un dato incorrecto? <button type="button" class="errbtn" data-err="1">Informar dun erro</button> · <a href="#aviso-legal">Aviso legal e privacidade</a></p><details class="fontes"><summary><b>Fontes</b> (${d.meta.fontes.length}) · datos a ${fmtD(d.meta.actualizado)} · versión ${PORTAL_VER}</summary><ul>${d.meta.fontes.map(f=>`<li>${esc(f)}</li>`).join('')}</ul></details><p>As fichas unen diversos rexistros de forma semiautomática polo nome completo. Poden existir inexactitudes e homónimos mal tratados.</p>`;
 }
 async function load(){
   const T0=performance.now();
